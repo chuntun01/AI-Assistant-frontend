@@ -5,6 +5,7 @@ export interface User {
   email: string;
   name: string;
   role: "admin" | "user";
+  avatar?: string | null;
 }
 
 export const saveAuth = (token: string, user: User) => {

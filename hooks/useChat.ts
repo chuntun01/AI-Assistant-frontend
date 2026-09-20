@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { getToken } from "@/lib/auth";
 import { chatApi } from "@/lib/api";
 
@@ -19,9 +19,11 @@ export function useChat() {
   const [messages, setMessages]   = useState<Message[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const loadingSessionIdRef = useRef<string | null>(null);
 
   // ── Load lai session cu tu DB ─────────────────────────────────────────
   const loadSession = useCallback(async (id: string) => {
+    loadingSessionIdRef.current = id;
     try {
       const res = await chatApi.getSession(id);
       const session = res.data.data;
@@ -34,6 +36,8 @@ export function useChat() {
         content: m.content,
         sources: m.sources || [],
       }));
+
+      if (loadingSessionIdRef.current !== id) return;
 
       setMessages(loaded);
       setSessionId(id);

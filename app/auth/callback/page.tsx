@@ -30,9 +30,9 @@ function AuthCallbackContent() {
         saveAuth(token, {
           id:     idFromUrl || payload.sub,
           email:  payload.email,
-          name:   decodeURIComponent(name),
+          name:   name,
           role:   role as "admin" | "user",
-          avatar: avatar ? decodeURIComponent(avatar) : null,
+          avatar: avatar ? avatar : null,
         });
         router.replace("/");
       } catch {
